@@ -37,7 +37,29 @@ class PortainerService {
         Uri.parse('$url/api/endpoints/$envId/docker/containers/json?all=true'),
         headers: headers);
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final List<dynamic> containers = jsonDecode(response.body) as List<dynamic>;
+
+      // Ordina per nome (primo elemento di `Names`, senza slash iniziale), case-insensitive
+      containers.sort((a, b) {
+        String extractName(dynamic item) {
+          try {
+            final names = item['Names'] as List<dynamic>?;
+            if (names != null && names.isNotEmpty) {
+              return names.first.toString().replaceFirst('/', '');
+            }
+            // fallback su 'Names' stringa o su Id se mancante
+            return item['Names']?.toString() ?? item['Id']?.toString() ?? '';
+          } catch (_) {
+            return '';
+          }
+        }
+
+        final nameA = extractName(a).toLowerCase();
+        final nameB = extractName(b).toLowerCase();
+        return nameA.compareTo(nameB);
+      });
+
+      return containers;
     } else {
       throw Exception('Errore nel caricamento container: ${response.body}');
     }

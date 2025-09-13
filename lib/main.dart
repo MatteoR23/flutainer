@@ -26,7 +26,16 @@ class FlutainerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutainer',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      // Usa la modalità tema del sistema
+      themeMode: ThemeMode.system,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blue,
+      ),
       home: FutureBuilder<Map<String, String?>>(
         future: _loadCredentials(),
         builder: (context, snapshot) {
