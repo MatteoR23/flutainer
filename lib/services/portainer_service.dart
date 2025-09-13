@@ -49,7 +49,7 @@ class PortainerService {
 
     final response = await http
         .post(Uri.parse('$url/api/endpoints/$envId/docker/containers/$id/start'), headers: headers);
-    if (response.statusCode == 304) {
+    if (response.statusCode == 409) {
       //Container is paused, unpause it
       await unpauseContainer(id, envId: envId);
     } else if (response.statusCode != 204) {
