@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:secure_store/secure_store.dart';
 import 'container_list_screen.dart';
+import 'package:flutainer/widgets/common_app_bar.dart';
 
 class SetupScreen extends StatefulWidget {
   const SetupScreen({super.key});
@@ -13,12 +14,11 @@ class _SetupScreenState extends State<SetupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _urlController = TextEditingController();
   final _apiKeyController = TextEditingController();
-  //final storage = const FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Configurazione Flutainer")),
+      appBar: const CommonAppBar(title: Text("Configurazione Flutainer")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -48,8 +48,6 @@ class _SetupScreenState extends State<SetupScreen> {
                       secret: _apiKeyController.text,
                       key: "password-store:apiKey",
                     );
-                    //await storage.write(key: 'url', value: _urlController.text);
-                    //await storage.write(key: 'apiKey', value: _apiKeyController.text);
                     if (!mounted) return;
                     await Future.delayed(const Duration(seconds: 1));
                     if (context.mounted) {

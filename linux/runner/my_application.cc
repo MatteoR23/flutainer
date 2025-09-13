@@ -4,6 +4,11 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
+#include <gtk/gtk.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <unistd.h>
+#include <limits.h>
+#include <string>
 
 #include "flutter/generated_plugin_registrant.h"
 
@@ -13,6 +18,35 @@ struct _MyApplication {
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
+
+static void set_app_icon_for_window(GtkWindow *window) {
+  char exe_path[PATH_MAX];
+  ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
+  if (len == -1) return;
+  exe_path[len] = '\0';
+  std::string dir(exe_path);
+  auto pos = dir.find_last_of('/');
+  if (pos == std::string::npos) return;
+  dir = dir.substr(0, pos); // directory dell'eseguibile
+
+  // Percorsi provati (bundle e fallback)
+  std::string icon_path = dir + "/../data/icons/hicolor/256x256/apps/flutainer.png";
+  if (!g_file_test(icon_path.c_str(), G_FILE_TEST_EXISTS)) {
+    icon_path = dir + "/../data/flutainer.png";
+    if (!g_file_test(icon_path.c_str(), G_FILE_TEST_EXISTS)) {
+      return;
+    }
+  }
+
+  GError *error = nullptr;
+  GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(icon_path.c_str(), &error);
+  if (pixbuf) {
+    gtk_window_set_icon(window, pixbuf);
+    g_object_unref(pixbuf);
+  } else {
+    if (error) g_clear_error(&error);
+  }
+}
 
 // Called when first Flutter frame received.
 static void first_frame_cb(MyApplication* self, FlView *view)
@@ -74,6 +108,8 @@ static void my_application_activate(GApplication* application) {
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
+
+  set_app_icon_for_window(GTK_WINDOW(window));
 }
 
 // Implements GApplication::local_command_line.

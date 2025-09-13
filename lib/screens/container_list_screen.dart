@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutainer/services/portainer_service.dart';
 import 'package:secure_store/secure_store.dart';
 import 'package:flutainer/screens/setup_screen.dart';
+import 'package:flutainer/widgets/common_app_bar.dart';
 
 class ContainerListScreen extends StatefulWidget {
   final String url;
@@ -78,22 +79,11 @@ class _ContainerListScreenState extends State<ContainerListScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
+      appBar: CommonAppBar(
         title: const Text("I tuoi container"),
         actions: [
-          IconButton(
-            tooltip: 'Refresh',
-            icon: const Icon(Icons.refresh),
-            onPressed: _refresh,
-          ),
-          // Logout button
-          IconButton(
-            tooltip: 'Logout',
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await _logout();
-            },
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _refresh),
+          IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
         ],
       ),
       body: Column(

@@ -91,6 +91,13 @@ install(CODE "
 set(INSTALL_BUNDLE_DATA_DIR "${CMAKE_INSTALL_PREFIX}/data")
 set(INSTALL_BUNDLE_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 
+# installa .desktop
+install(FILES "data/flutainer.desktop" DESTINATION "${INSTALL_BUNDLE_DATA_DIR}" COMPONENT Runtime)
+
+# installa icone
+install(FILES "icons/hicolor/256x256/apps/flutainer.png" DESTINATION "${INSTALL_BUNDLE_DATA_DIR}/icons/hicolor/256x256/apps" COMPONENT Runtime)
+install(FILES "icons/hicolor/512x512/apps/flutainer.png" DESTINATION "${INSTALL_BUNDLE_DATA_DIR}/icons/hicolor/512x512/apps" COMPONENT Runtime)
+
 install(TARGETS ${BINARY_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}"
   COMPONENT Runtime)
 
