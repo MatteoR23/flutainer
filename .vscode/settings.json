@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "dart.flutterSdkPath": "~/install/flutter",
+  "dart.lineLength": 100,
+  "cmake.sourceDirectory": "/home/matteo/git/flutainer/linux"
+}

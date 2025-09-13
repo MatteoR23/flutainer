@@ -2,6 +2,10 @@
 cmake_minimum_required(VERSION 3.13)
 project(runner LANGUAGES CXX)
 
+# Forza un percorso di installazione nella build directory per evitare /usr/local
+# (utile per debug in utenza normale)
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Install path" FORCE)
+
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
 set(BINARY_NAME "flutainer")
@@ -54,8 +58,23 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
 
+# Forza gli output (eseguibili, librerie, archivi) nella directory bundle usata dal launcher
+# Questo garantisce che l'eseguibile venga sempre generato in:
+#   build/<config>/bundle/
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bundle")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bundle")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bundle")
+
 # Application build; see runner/CMakeLists.txt.
+add_subdirectory(${FLUTTER_MANAGED_DIR})
 add_subdirectory("runner")
+
+# Assicura che l'eseguibile finisca in build/.../bundle (forza anche per il target creato in runner)
+set_target_properties(${BINARY_NAME} PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bundle"
+  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bundle"
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bundle"
+)
 
 # Run the Flutter tool portions of the build. This must not be removed.
 add_dependencies(${BINARY_NAME} flutter_assemble)
@@ -64,17 +83,15 @@ add_dependencies(${BINARY_NAME} flutter_assemble)
 # correctly, since the resources must in the right relative locations. To avoid
 # people trying to run the unbundled copy, put it in a subdirectory instead of
 # the default top-level location.
-set_target_properties(${BINARY_NAME}
-  PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/intermediates_do_not_run"
-)
-
+# --- removed: do not move runtime output to intermediates_do_not_run ---
 
 # Generated plugin build rules, which manage building the plugins and adding
 # them to the application.
 include(flutter/generated_plugins.cmake)
 
-
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Install path" FORCE)
+endif()
 # === Installation ===
 # By default, "installing" just makes a relocatable bundle in the build
 # directory.
