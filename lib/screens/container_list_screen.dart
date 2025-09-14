@@ -54,10 +54,8 @@ class _ContainerListScreenState extends State<ContainerListScreen> {
         return isDark ? Colors.green.shade700 : Colors.green.shade200;
       case "paused":
         return isDark ? Colors.orange.shade700 : Colors.orange.shade200;
-      case "exited":
-        return isDark ? Colors.grey.shade800 : Colors.grey.shade300;
       default:
-        return isDark ? Colors.red.shade700 : Colors.red.shade200;
+        return isDark ? Colors.grey.shade800 : Colors.grey.shade300;
     }
   }
 
