@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Flutainer
-Comment=Manage Docker containers via Portainer
-Exec=./flutainer
-Icon=flutainer
-Type=Application
-Terminal=false
-Categories=Utility;
