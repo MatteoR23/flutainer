@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:secure_store/secure_store.dart';
+import 'package:flutainer/services/secure_storage_service.dart';
 import 'container_list_screen.dart';
 import 'package:flutainer/widgets/common_app_bar.dart';
 
@@ -39,15 +39,18 @@ class _SetupScreenState extends State<SetupScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
+                  final store = SecureStorageService();
                   if (_formKey.currentState!.validate()) {
-                    await PasswordStore(password: '1234').storeSecret(
-                      secret: _urlController.text,
-                      key: "password-store:url",
-                    );
-                    await PasswordStore(password: '1234').storeSecret(
-                      secret: _apiKeyController.text,
-                      key: "password-store:apiKey",
-                    );
+                    store.write("url", _urlController.text);
+                    store.write("apiKey", _apiKeyController.text);
+                    // await PasswordStore(password: '1234').storeSecret(
+                    //   secret: _urlController.text,
+                    //   key: "password-store:url",
+                    // );
+                    // await PasswordStore(password: '1234').storeSecret(
+                    //   secret: _apiKeyController.text,
+                    //   key: "password-store:apiKey",
+                    // );
                     if (!mounted) return;
                     await Future.delayed(const Duration(seconds: 1));
                     if (context.mounted) {

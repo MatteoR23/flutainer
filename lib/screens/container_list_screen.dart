@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutainer/services/portainer_service.dart';
-import 'package:secure_store/secure_store.dart';
+import 'package:flutainer/services/secure_storage_service.dart';
 import 'package:flutainer/screens/setup_screen.dart';
 import 'package:flutainer/widgets/common_app_bar.dart';
 
@@ -196,9 +196,9 @@ class _ContainerListScreenState extends State<ContainerListScreen> {
 
   Future<void> _logout() async {
     // cancella le credenziali dallo storage
-    final store = PasswordStore(password: '1234');
+    final store = SecureStorageService();
     try {
-      await store.deleteSecret(key: 'password-store:apiKey');
+      await store.delete("apiKey");
     } catch (_) {}
 
     if (!mounted) return;

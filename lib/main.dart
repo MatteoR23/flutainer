@@ -1,10 +1,9 @@
+import 'package:flutainer/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutainer/screens/setup_screen.dart';
 import 'package:flutainer/screens/container_list_screen.dart';
-import 'package:secure_store/secure_store.dart';
 
 void main() {
-  PasswordStore.init();
   runApp(const FlutainerApp());
 }
 
@@ -13,12 +12,9 @@ class FlutainerApp extends StatelessWidget {
 
   Future<Map<String, String?>> _loadCredentials() async {
     // const storage = FlutterSecureStorage();
-    final url = await PasswordStore(password: '1234').getSecret(
-      key: "password-store:url",
-    );
-    final apiKey = await PasswordStore(password: '1234').getSecret(
-      key: "password-store:apiKey",
-    );
+    final store = SecureStorageService();
+    final url = await store.read("url");
+    final apiKey = await store.read("apiKey");
     return {'url': url, 'apiKey': apiKey};
   }
 
