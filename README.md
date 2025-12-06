@@ -27,7 +27,7 @@ your Docker containers from mobile or desktop devices. It currently supports:
 
 ## Roadmap
 
-- [ ] Review app permissions
+- [x] Review app permissions
 - [ ] Implement view container logs
 - [ ] Implement container exec
 - [ ] Implement translations
