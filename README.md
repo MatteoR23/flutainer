@@ -32,8 +32,9 @@ your Docker containers from mobile or desktop devices. It currently supports:
 - [ ] Implement translations
 - [x] Implement in-app logs (DEBUG only)
 - [x] Apply a gracefully theme (with dark and light mode)
-- [ ] Github autobuild apk
 - [ ] Apk signing
+- [ ] Github autobuild apk
 - [ ] Publish to F-Droid
 - [ ] Publish to PlayStore
-- [ ] Implement container exec
+- [ ] First stable release
+- [ ] ... new ideas
