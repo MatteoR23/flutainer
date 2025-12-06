@@ -1,28 +1,38 @@
 # flutainer
 
-A new Flutter project.
+Flutainer is a Flutter client for Portainer that lets you monitor and control
+your Docker containers from mobile or desktop devices. It currently supports:
+
+- Registering Portainer endpoints through API keys
+- Browsing environments and their containers
+- Filtering containers by name
+- Starting, stopping, pausing, and unpausing containers with busy-state feedback
+- Optional auto-refresh to keep statuses up to date
+
+## Build & Run
+
+1. Install Flutter (3.x or newer) plus the platform-specific toolchains (Android Studio, Xcode, etc.). Follow the official [installation guide](https://docs.flutter.dev/get-started/install).
+2. Install project dependencies:
+   ```sh
+   flutter pub get
+   ```
+3. Run the app on a connected device/emulator:
+   ```sh
+   flutter run
+   ```
+4. Build a release APK (adjust the target/platform command as needed):
+   ```sh
+   flutter build apk --release
+   ```
 
 ## Roadmap
 
-- Review app permissions
-- Implement view container logs
-- Implement container exec
-- Implement translations
-- Apply a gracefully theme (with dark and light mode)
-- Github autobuild apk
-- Apk signing
-- Publish to F-Droid
-- Publish to PlayStore
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [ ] Review app permissions
+- [ ] Implement view container logs
+- [ ] Implement container exec
+- [ ] Implement translations
+- [ ] Apply a gracefully theme (with dark and light mode)
+- [ ] Github autobuild apk
+- [ ] Apk signing
+- [ ] Publish to F-Droid
+- [ ] Publish to PlayStore
