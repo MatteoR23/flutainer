@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/l10n.dart';
 import '../models/endpoint_credential.dart';
 import '../viewmodels/app_view_model.dart';
 import 'list_containers_view.dart';
@@ -15,17 +16,17 @@ class HomePageView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Endpoints'),
+        title: Text(context.l10n.endpointsTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: 'Ricarica',
+            tooltip: context.l10n.refreshTooltip,
             onPressed: viewModel.isLoading ? null : () => viewModel.refresh(),
           ),
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.menu),
-              tooltip: 'Menu',
+              tooltip: context.l10n.menuTooltip,
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
@@ -38,7 +39,7 @@ class HomePageView extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showCredentialDialog(context),
         icon: const Icon(Icons.add),
-        label: const Text('Aggiungi endpoint'),
+        label: Text(context.l10n.addEndpoint),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -64,14 +65,15 @@ class HomePageView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              viewModel.errorMessage!,
+              context.l10n
+                  .credentialsLoadError(viewModel.errorMessage ?? ''),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 12),
             FilledButton(
               onPressed: viewModel.refresh,
-              child: const Text('Riprova'),
+              child: Text(context.l10n.retry),
             ),
           ],
         ),
@@ -81,7 +83,7 @@ class HomePageView extends StatelessWidget {
     if (viewModel.credentials.isEmpty) {
       return Center(
         child: Text(
-          'Non hai ancora configurato endpoint.\nAggiungine uno per iniziare.',
+          context.l10n.noEndpointsMessage,
           style: Theme.of(context).textTheme.bodyLarge,
           textAlign: TextAlign.center,
         ),
@@ -116,8 +118,8 @@ Future<void> _showCredentialDialog(
     builder: (context) {
       return AlertDialog(
         title: Text(credential == null
-            ? 'Nuovo endpoint'
-            : 'Modifica endpoint'),
+            ? context.l10n.newEndpointTitle
+            : context.l10n.editEndpointTitle),
         content: Form(
           key: formKey,
           child: Column(
@@ -125,21 +127,21 @@ Future<void> _showCredentialDialog(
             children: [
               TextFormField(
                 controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nome',
-                  hintText: 'Produzione, Demo...',
+                decoration: InputDecoration(
+                  labelText: context.l10n.nameFieldLabel,
+                  hintText: context.l10n.nameFieldHint,
                 ),
               ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: urlController,
-                decoration: const InputDecoration(
-                  labelText: 'URL Portainer',
-                  hintText: 'https://example.it/api',
+                decoration: InputDecoration(
+                  labelText: context.l10n.urlFieldLabel,
+                  hintText: context.l10n.urlFieldHint,
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Inserisci un URL valido';
+                    return context.l10n.urlFieldError;
                   }
                   return null;
                 },
@@ -147,12 +149,12 @@ Future<void> _showCredentialDialog(
               const SizedBox(height: 12),
               TextFormField(
                 controller: apiKeyController,
-                decoration: const InputDecoration(
-                  labelText: 'API key',
+                decoration: InputDecoration(
+                  labelText: context.l10n.apiKeyFieldLabel,
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Inserisci un\'API key';
+                    return context.l10n.apiKeyFieldError;
                   }
                   return null;
                 },
@@ -163,7 +165,7 @@ Future<void> _showCredentialDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Annulla'),
+            child: Text(context.l10n.dialogCancel),
           ),
           FilledButton(
             onPressed: () async {
@@ -186,7 +188,7 @@ Future<void> _showCredentialDialog(
                 Navigator.of(context).pop(true);
               }
             },
-            child: const Text('Salva'),
+            child: Text(context.l10n.dialogSave),
           ),
         ],
       );
@@ -197,8 +199,12 @@ Future<void> _showCredentialDialog(
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(credential == null
-            ? 'Endpoint "${nameController.text.isEmpty ? urlController.text : nameController.text}" creato'
-            : 'Endpoint aggiornato'),
+            ? context.l10n.endpointCreated(
+                nameController.text.isEmpty
+                    ? urlController.text
+                    : nameController.text,
+              )
+            : context.l10n.endpointUpdated),
       ),
     );
   }
@@ -208,18 +214,18 @@ Future<void> _confirmDeletion(BuildContext context, String credentialId) async {
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('Elimina endpoint'),
-      content: const Text(
-        'Sei sicuro di voler eliminare questo endpoint? L\'operazione non è reversibile.',
+      title: Text(context.l10n.deleteEndpointTitle),
+      content: Text(
+        context.l10n.deleteEndpointMessage,
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Annulla'),
+          child: Text(context.l10n.dialogCancel),
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Elimina'),
+          child: Text(context.l10n.deleteAction),
         ),
       ],
     ),
@@ -231,7 +237,7 @@ Future<void> _confirmDeletion(BuildContext context, String credentialId) async {
     await context.read<AppViewModel>().deleteCredential(credentialId);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Endpoint eliminato')),
+      SnackBar(content: Text(context.l10n.endpointDeleted)),
     );
   }
 }
@@ -296,7 +302,7 @@ class _FlutainerHero extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Benvenuto su Flutainer',
+                  context.l10n.heroTitle,
                   style: theme.textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -304,7 +310,7 @@ class _FlutainerHero extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Tieni sotto controllo i container Portainer ovunque tu sia.',
+                  context.l10n.heroSubtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.white70,
                   ),
@@ -342,7 +348,11 @@ class _EndpointCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'API key: ${_maskApiKey(credential.apiKey)}',
+              context.l10n.apiKeyLabel(
+                credential.apiKey.isEmpty
+                    ? context.l10n.emptyValue
+                    : _maskApiKey(credential.apiKey),
+              ),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 12),
@@ -353,7 +363,7 @@ class _EndpointCard extends StatelessWidget {
                 FilledButton.tonalIcon(
                   onPressed: () => _connectToEndpoint(context, credential),
                   icon: const Icon(Icons.podcasts),
-                  label: const Text('Connetti'),
+                  label: Text(context.l10n.connectAction),
                 ),
                 OutlinedButton.icon(
                   onPressed: () => _showCredentialDialog(
@@ -361,12 +371,12 @@ class _EndpointCard extends StatelessWidget {
                     credential: credential,
                   ),
                   icon: const Icon(Icons.edit),
-                  label: const Text('Modifica'),
+                  label: Text(context.l10n.editAction),
                 ),
                 TextButton.icon(
                   onPressed: () => _confirmDeletion(context, credential.id),
                   icon: const Icon(Icons.delete_outline),
-                  label: const Text('Elimina'),
+                  label: Text(context.l10n.removeAction),
                 ),
               ],
             ),

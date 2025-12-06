@@ -32,8 +32,8 @@ class AppViewModel extends ChangeNotifier {
       _errorMessage = null;
       _logger.log('Loaded ${_credentials.length} credential(s) from storage');
     } catch (error) {
-      _errorMessage = 'Impossibile caricare le credenziali: $error';
-      _logger.log('Failed to load credentials: $error');
+      _errorMessage = error.toString();
+      _logger.logError('Failed to load credentials: $error');
     } finally {
       _isLoading = false;
       notifyListeners();

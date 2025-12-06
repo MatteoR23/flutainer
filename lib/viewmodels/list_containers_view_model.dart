@@ -4,12 +4,14 @@ import 'package:flutter/foundation.dart';
 
 import '../models/portainer_container.dart';
 import '../models/portainer_environment.dart';
+import '../services/app_logger.dart';
 import '../services/portainer_service.dart';
 
 class ListContainersViewModel extends ChangeNotifier {
-  ListContainersViewModel({required this.service});
+  ListContainersViewModel({required this.service}) : _logger = AppLogger.instance;
 
   final PortainerService service;
+  final AppLogger _logger;
 
   List<PortainerEnvironment> _environments = <PortainerEnvironment>[];
   List<PortainerContainer> _containers = <PortainerContainer>[];
@@ -56,6 +58,7 @@ class ListContainersViewModel extends ChangeNotifier {
     try {
       final data = await service.fetchEnvironments();
       _environments = data;
+      _logger.log('Fetched ${data.length} environment(s)');
       if (data.isEmpty) {
         _selectedEnvironment = null;
         _containers = <PortainerContainer>[];
@@ -74,6 +77,7 @@ class ListContainersViewModel extends ChangeNotifier {
       }
     } catch (error) {
       _environmentError = error.toString();
+      _logger.logError('Failed to load environments: $error');
     } finally {
       _isLoadingEnvironments = false;
       notifyListeners();
@@ -158,6 +162,7 @@ class ListContainersViewModel extends ChangeNotifier {
     }
     try {
       final data = await service.fetchContainers(environment.id);
+      _logger.log('Fetched ${data.length} container(s) for environment ${environment.name}');
       data.sort(
         (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
       );
@@ -168,6 +173,7 @@ class ListContainersViewModel extends ChangeNotifier {
         _containers = <PortainerContainer>[];
       }
       _containersError = error.toString();
+      _logger.logError('Failed to load containers: $error');
     } finally {
       if (showLoading) {
         _isLoadingContainers = false;
@@ -186,9 +192,11 @@ class ListContainersViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await action(environment.id, containerId);
+      _logger.log('Executed action on container $containerId in environment ${environment.name}');
       await _loadContainersForSelected(showLoading: false);
     } catch (error) {
       _containersError = error.toString();
+      _logger.logError('Container action failed: $error');
       notifyListeners();
     } finally {
       _busyContainerIds.remove(containerId);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../l10n/l10n.dart';
 import '../../models/endpoint_credential.dart';
 import '../../viewmodels/app_view_model.dart';
 import '../settings_view.dart';
@@ -28,7 +29,7 @@ class AppNavigationDrawer extends StatelessWidget {
             const _DrawerHeader(),
             ListTile(
               leading: const Icon(Icons.home),
-              title: const Text('Home Page'),
+              title: Text(context.l10n.drawerHome),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).popUntil((route) => route.isFirst);
@@ -39,7 +40,7 @@ class AppNavigationDrawer extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
-                  'Endpoints',
+                  context.l10n.drawerEndpointsHeader,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -68,10 +69,10 @@ class AppNavigationDrawer extends StatelessWidget {
                 ),
               )
             else
-              const Expanded(
+              Expanded(
                 child: Center(
                   child: Text(
-                    'Nessun endpoint configurato',
+                    context.l10n.drawerEmpty,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -80,7 +81,7 @@ class AppNavigationDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: FilledButton.icon(
                 icon: const Icon(Icons.settings),
-                label: const Text('Impostazioni'),
+                label: Text(context.l10n.drawerSettings),
                 onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(
@@ -129,14 +130,14 @@ class _DrawerHeader extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Flutainer',
+              context.l10n.appTitle,
               style: theme.textTheme.titleLarge?.copyWith(
                 color: theme.colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              'Portainer companion',
+              context.l10n.drawerSubtitle,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onPrimary,
               ),

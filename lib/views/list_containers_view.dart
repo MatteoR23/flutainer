@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/l10n.dart';
 import '../models/endpoint_credential.dart';
 import '../models/portainer_container.dart';
 import '../services/portainer_service.dart';
@@ -38,12 +39,12 @@ class _ListContainersScaffold extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutainer - Containers'),
+        title: Text(context.l10n.containersAppBarTitle),
         actions: [
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.menu),
-              tooltip: 'Menu',
+              tooltip: context.l10n.menuTooltip,
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
@@ -74,16 +75,17 @@ class _ListContainersScaffold extends StatelessWidget {
 
     if (viewModel.environmentError != null) {
       return _ErrorState(
-        message: viewModel.environmentError!,
-        actionLabel: 'Riprova',
+        message: context.l10n
+            .environmentLoadError(viewModel.environmentError ?? ''),
+        actionLabel: context.l10n.retry,
         onAction: viewModel.loadEnvironments,
       );
     }
 
     if (viewModel.environments.isEmpty) {
       return _ErrorState(
-        message: 'Nessun environment disponibile su questo Portainer.',
-        actionLabel: 'Ricarica',
+        message: context.l10n.noEnvironmentsMessage,
+        actionLabel: context.l10n.refreshButton,
         onAction: viewModel.loadEnvironments,
       );
     }
@@ -96,8 +98,8 @@ class _ListContainersScaffold extends StatelessWidget {
       children: [
         DropdownButtonFormField<int>(
           initialValue: selectedEnv?.id,
-          decoration: const InputDecoration(
-            labelText: 'Environment',
+          decoration: InputDecoration(
+            labelText: context.l10n.environmentLabel,
             border: OutlineInputBorder(),
           ),
           items: viewModel.environments
@@ -123,9 +125,9 @@ class _ListContainersScaffold extends StatelessWidget {
               child: TextFormField(
                 initialValue: viewModel.searchQuery,
                 onChanged: viewModel.setSearchQuery,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Cerca container...',
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  hintText: context.l10n.searchHint,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -136,7 +138,7 @@ class _ListContainersScaffold extends StatelessWidget {
                   ? null
                   : viewModel.refreshContainers,
               icon: const Icon(Icons.refresh),
-              label: const Text('Refresh'),
+              label: Text(context.l10n.refreshButton),
             ),
           ],
         ),
@@ -150,7 +152,7 @@ class _ListContainersScaffold extends StatelessWidget {
                 onChanged: viewModel.setAutoRefresh,
               ),
               const SizedBox(width: 4),
-              const Text('Auto refresh'),
+              Text(context.l10n.autoRefreshLabel),
             ],
           ),
         ),
@@ -159,13 +161,14 @@ class _ListContainersScaffold extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
-              viewModel.containersError!,
+              context.l10n
+                  .containersLoadError(viewModel.containersError ?? ''),
               style: theme.textTheme.bodyMedium
                   ?.copyWith(color: theme.colorScheme.error),
             ),
           ),
         Expanded(
-          child: _buildContainersSection(viewModel, theme),
+          child: _buildContainersSection(viewModel, theme, context),
         ),
       ],
     );
@@ -174,6 +177,7 @@ class _ListContainersScaffold extends StatelessWidget {
   Widget _buildContainersSection(
     ListContainersViewModel viewModel,
     ThemeData theme,
+    BuildContext context,
   ) {
     if (viewModel.isLoadingContainers) {
       return const Center(child: CircularProgressIndicator());
@@ -181,14 +185,14 @@ class _ListContainersScaffold extends StatelessWidget {
 
     final containers = viewModel.filteredContainers;
     if (viewModel.containers.isEmpty) {
-      return const _ErrorState(
-        message: 'Nessun container trovato per questo environment.',
+      return _ErrorState(
+        message: context.l10n.noContainersMessage,
       );
     }
 
     if (containers.isEmpty) {
-      return const _ErrorState(
-        message: 'Nessun container corrisponde alla ricerca.',
+      return _ErrorState(
+        message: context.l10n.noSearchResultsMessage,
       );
     }
 
@@ -296,7 +300,7 @@ class _ContainerCard extends StatelessWidget {
             children: [
               if (container.canStart)
                 IconButton(
-                  tooltip: 'Avvia',
+                  tooltip: context.l10n.startAction,
                   onPressed: isBusy
                       ? null
                       : () => viewModel.startContainer(container.id),
@@ -304,7 +308,7 @@ class _ContainerCard extends StatelessWidget {
                 ),
               if (container.canStop)
                 IconButton(
-                  tooltip: 'Stop',
+                  tooltip: context.l10n.stopAction,
                   onPressed: isBusy
                       ? null
                       : () => viewModel.stopContainer(container.id),
@@ -312,7 +316,7 @@ class _ContainerCard extends StatelessWidget {
                 ),
               if (container.canPause)
                 IconButton(
-                  tooltip: 'Pausa',
+                  tooltip: context.l10n.pauseAction,
                   onPressed: isBusy
                       ? null
                       : () => viewModel.pauseContainer(container.id),
@@ -320,7 +324,7 @@ class _ContainerCard extends StatelessWidget {
                 ),
               if (container.canUnpause)
                 IconButton(
-                  tooltip: 'Riprendi',
+                  tooltip: context.l10n.resumeAction,
                   onPressed: isBusy
                       ? null
                       : () => viewModel.unpauseContainer(container.id),
@@ -334,7 +338,7 @@ class _ContainerCard extends StatelessWidget {
             child: OutlinedButton.icon(
               onPressed: onViewLogs,
               icon: const Icon(Icons.receipt_long),
-              label: const Text('View log'),
+              label: Text(context.l10n.viewLogAction),
             ),
           ),
         ],

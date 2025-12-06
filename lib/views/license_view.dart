@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/l10n.dart';
+
 class LicenseView extends StatelessWidget {
   const LicenseView({super.key});
 
@@ -12,7 +14,7 @@ class LicenseView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Licenza MIT'),
+        title: Text(context.l10n.licenseTitle),
       ),
       body: FutureBuilder<String>(
         future: _loadLicense(),
@@ -25,7 +27,7 @@ class LicenseView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'Impossibile caricare la licenza: ${snapshot.error}',
+                  context.l10n.licenseLoadError('${snapshot.error}'),
                   textAlign: TextAlign.center,
                 ),
               ),

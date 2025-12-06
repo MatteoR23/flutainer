@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-import 'viewmodels/app_view_model.dart';
-import 'viewmodels/theme_view_model.dart';
+import 'l10n/app_localizations.dart';
 import 'services/app_logger.dart';
+import 'viewmodels/app_view_model.dart';
+import 'viewmodels/locale_view_model.dart';
+import 'viewmodels/theme_view_model.dart';
 import 'views/home_page_view.dart';
 
 void main() {
@@ -29,15 +32,27 @@ class FlutainerApp extends StatelessWidget {
         ChangeNotifierProvider<AppViewModel>(
           create: (_) => _viewModel ?? AppViewModel(logger: appLogger),
         ),
+        ChangeNotifierProvider<LocaleViewModel>(
+          create: (_) => LocaleViewModel(),
+        ),
       ],
-      child: Consumer<ThemeViewModel>(
-        builder: (context, themeViewModel, _) {
+      child: Consumer2<ThemeViewModel, LocaleViewModel>(
+        builder: (context, themeViewModel, localeViewModel, _) {
           return MaterialApp(
-            title: 'Flutainer',
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context)?.appTitle ?? 'Flutainer',
             debugShowCheckedModeBanner: false,
             theme: _buildLightTheme(),
             darkTheme: _buildDarkTheme(),
             themeMode: themeViewModel.mode,
+            locale: localeViewModel.locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
             home: const HomePageView(),
           );
         },

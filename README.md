@@ -29,7 +29,7 @@ your Docker containers from mobile or desktop devices. It currently supports:
 
 - [x] Review app permissions
 - [x] Implement view container logs
-- [ ] Implement translations
+- [x] Implement translations
 - [x] Implement in-app logs (DEBUG only)
 - [x] Apply a gracefully theme (with dark and light mode)
 - [ ] Apk signing

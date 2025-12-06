@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/l10n.dart';
 import '../models/endpoint_credential.dart';
 import '../models/portainer_container.dart';
 import '../services/portainer_service.dart';
@@ -112,7 +113,7 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
           child: ExpansionTile(
             initiallyExpanded: false,
             maintainState: true,
-            title: const Text('Log preferences'),
+            title: Text(context.l10n.logPreferencesTitle),
             tilePadding: const EdgeInsets.symmetric(horizontal: 16),
             childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             children: [content],
@@ -172,7 +173,7 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Lines & Refresh',
+          context.l10n.linesRefreshTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
@@ -182,8 +183,8 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
               child: TextField(
                 controller: _linesController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Lines (default 1000)',
+                decoration: InputDecoration(
+                  labelText: context.l10n.linesFieldLabel(1000),
                 ),
                 onSubmitted: (_) => _applyLineCount(viewModel),
               ),
@@ -191,7 +192,7 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
             const SizedBox(width: 12),
             FilledButton(
               onPressed: () => _applyLineCount(viewModel),
-              child: const Text('Apply'),
+              child: Text(context.l10n.applyLines),
             ),
           ],
         ),
@@ -208,8 +209,8 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
           children: [
             Expanded(
               child: _preferenceSwitchTile(
-                title: 'Auto-refresh',
-                subtitle: 'Aggiorna log automaticamente',
+                title: context.l10n.autoRefreshLabel,
+                subtitle: context.l10n.autoRefreshHint,
                 value: viewModel.autoRefresh,
                 onChanged: viewModel.toggleAutoRefresh,
               ),
@@ -220,15 +221,15 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
                 child: FilledButton.icon(
                   onPressed: viewModel.isLoading ? null : viewModel.refresh,
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Refresh'),
+                  label: Text(context.l10n.manualRefresh),
                 ),
               ),
           ],
         ),
         const SizedBox(height: 8),
         _preferenceSwitchTile(
-          title: 'Wrap log lines',
-          subtitle: 'Disattiva per scorrere orizzontalmente',
+          title: context.l10n.wrapLogLines,
+          subtitle: context.l10n.wrapHint,
           value: viewModel.wrapLines,
           onChanged: viewModel.setWrapLines,
         ),
@@ -240,7 +241,7 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
     final parsed = int.tryParse(_linesController.text.trim());
     if (parsed == null || parsed <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Inserisci un numero di righe valido')),
+        SnackBar(content: Text(context.l10n.linesApplyError)),
       );
       return;
     }
@@ -252,32 +253,30 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Display',
+          context.l10n.displayTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
         SegmentedButton<LogLabelMode>(
-          segments: const [
+          segments: [
             ButtonSegment<LogLabelMode>(
               value: LogLabelMode.lineNumber,
-              label: Text('Line Number'),
-              icon: Icon(Icons.format_list_numbered),
+              label: Text(context.l10n.lineNumberOption),
+              icon: const Icon(Icons.format_list_numbered),
             ),
             ButtonSegment<LogLabelMode>(
               value: LogLabelMode.timestamp,
-              label: Text('Timestamp'),
-              icon: Icon(Icons.access_time),
+              label: Text(context.l10n.timestampOption),
+              icon: const Icon(Icons.access_time),
             ),
           ],
           selected: <LogLabelMode>{viewModel.labelMode},
           onSelectionChanged: (selection) =>
               viewModel.setLabelMode(selection.first),
         ),
-        SwitchListTile(
-          dense: true,
-          contentPadding: EdgeInsets.zero,
-          title: const Text('Wrap log lines'),
-          subtitle: const Text('Disattiva per scorrere orizzontalmente'),
+        _preferenceSwitchTile(
+          title: context.l10n.wrapLogLines,
+          subtitle: context.l10n.wrapHint,
           value: viewModel.wrapLines,
           onChanged: viewModel.setWrapLines,
         ),
@@ -294,7 +293,7 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
     }
     if (viewModel.errorMessage != null && viewModel.entries.isEmpty) {
       return _ErrorState(
-        message: viewModel.errorMessage!,
+        message: context.l10n.logLoadError(viewModel.errorMessage ?? ''),
         onRetry: viewModel.refresh,
       );
     }
@@ -387,7 +386,7 @@ class _ErrorState extends StatelessWidget {
           FilledButton.icon(
             onPressed: onRetry,
             icon: const Icon(Icons.refresh),
-            label: const Text('Riprova'),
+            label: Text(context.l10n.retry),
           ),
         ],
       ),
@@ -400,9 +399,9 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Text(
-        'Nessun log disponibile per questo container.',
+        context.l10n.containerLogsEmpty,
         textAlign: TextAlign.center,
       ),
     );

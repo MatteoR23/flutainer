@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/container_log_entry.dart';
+import '../services/app_logger.dart';
 import '../services/portainer_service.dart';
 
 enum LogLabelMode { lineNumber, timestamp }
@@ -13,11 +14,12 @@ class ContainerLogViewModel extends ChangeNotifier {
     required this.service,
     required this.environmentId,
     required this.containerId,
-  });
+  }) : _logger = AppLogger.instance;
 
   final PortainerService service;
   final int environmentId;
   final String containerId;
+  final AppLogger _logger;
 
   static const String _linesKey = 'container_log_lines';
 
@@ -60,8 +62,10 @@ class ContainerLogViewModel extends ChangeNotifier {
       );
       _entries = logs;
       _errorMessage = null;
+      _logger.log('Loaded ${logs.length} log line(s) for container $containerId');
     } catch (error) {
       _errorMessage = error.toString();
+      _logger.logError('Failed to load container logs: $error');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -75,6 +79,7 @@ class ContainerLogViewModel extends ChangeNotifier {
     if (_lineCount == sanitized) return;
     _lineCount = sanitized;
     _prefs?.setInt(_linesKey, _lineCount);
+    _logger.log('Updated log line count to $_lineCount');
     notifyListeners();
     unawaited(loadLogs());
   }
@@ -84,9 +89,11 @@ class ContainerLogViewModel extends ChangeNotifier {
     _autoRefresh = value;
     if (value) {
       _startTimer();
+      _logger.log('Enabled auto refresh for container logs');
     } else {
       _refreshTimer?.cancel();
       _refreshTimer = null;
+      _logger.log('Disabled auto refresh for container logs');
     }
     notifyListeners();
   }

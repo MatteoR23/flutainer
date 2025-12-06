@@ -1,0 +1,155 @@
+{
+  "@@locale": "en",
+  "appTitle": "Flutainer",
+  "endpointsTitle": "Endpoints",
+  "refreshTooltip": "Refresh",
+  "menuTooltip": "Menu",
+  "addEndpoint": "Add endpoint",
+  "heroTitle": "Welcome to Flutainer",
+  "heroSubtitle": "Keep your Portainer containers under control everywhere.",
+  "noEndpointsMessage": "You haven't configured any endpoints yet. Add one to get started.",
+  "retry": "Retry",
+  "newEndpointTitle": "New endpoint",
+  "editEndpointTitle": "Edit endpoint",
+  "nameFieldLabel": "Name",
+  "nameFieldHint": "Production, Demo...",
+  "urlFieldLabel": "Portainer URL",
+  "urlFieldHint": "https://example.com/api",
+  "urlFieldError": "Enter a valid URL",
+  "apiKeyFieldLabel": "API key",
+  "apiKeyFieldError": "Enter an API key",
+  "dialogCancel": "Cancel",
+  "dialogSave": "Save",
+  "endpointCreated": "Endpoint \"{name}\" created",
+  "@endpointCreated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "endpointUpdated": "Endpoint updated",
+  "deleteEndpointTitle": "Delete endpoint",
+  "deleteEndpointMessage": "Are you sure you want to delete this endpoint? This action cannot be undone.",
+  "deleteAction": "Delete",
+  "endpointDeleted": "Endpoint deleted",
+  "connectAction": "Connect",
+  "editAction": "Edit",
+  "removeAction": "Remove",
+  "viewLogAction": "View log",
+  "apiKeyLabel": "API key: {value}",
+  "@apiKeyLabel": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "emptyValue": "(empty)",
+  "drawerHome": "Home",
+  "drawerSettings": "Settings",
+  "drawerEmpty": "No endpoints configured",
+  "drawerEndpointsHeader": "Endpoints",
+  "drawerSubtitle": "Portainer companion",
+  "settingsTitle": "Settings",
+  "themeTitle": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "languageTitle": "Language",
+  "languageSelectLabel": "Choose a language",
+  "languageSystemDefault": "Follow system language",
+  "languageEnglish": "English",
+  "languageItalian": "Italian",
+  "languageSpanish": "Spanish",
+  "languagePortuguese": "Portuguese",
+  "languageGerman": "German",
+  "licenseCardTitle": "License (MIT)",
+  "licenseCardSubtitle": "View license terms",
+  "logCardTitle": "App logs",
+  "logCardSubtitle": "Available only in debug",
+  "licenseTitle": "MIT License",
+  "licenseLoadError": "Unable to load the license: {details}",
+  "@licenseLoadError": {
+    "placeholders": {
+      "details": {}
+    }
+  },
+  "debugLogTitle": "Application logs",
+  "debugLogEmpty": "No logs available",
+  "logClearTooltip": "Clear logs",
+  "logExportButton": "Export logs",
+  "logExportSuccess": "Logs exported",
+  "logExportError": "Unable to export logs: {details}",
+  "@logExportError": {
+    "placeholders": {
+      "details": {}
+    }
+  },
+  "logExportInstructions": "Use Export logs to share a text file, then open an issue on GitHub (MatteoR23/Flutainer) and attach the file.",
+  "containersAppBarTitle": "Flutainer - Containers",
+  "environmentLabel": "Environment",
+  "searchHint": "Search containers...",
+  "refreshButton": "Refresh",
+  "autoRefreshLabel": "Auto refresh",
+  "noEnvironmentsMessage": "No environments available for this endpoint.",
+  "noContainersMessage": "No containers found for the selected environment.",
+  "noSearchResultsMessage": "No container matches the search.",
+  "environmentLoadError": "Unable to load environments: {details}",
+  "@environmentLoadError": {
+    "placeholders": {
+      "details": {}
+    }
+  },
+  "containersLoadError": "Unable to load containers: {details}",
+  "@containersLoadError": {
+    "placeholders": {
+      "details": {}
+    }
+  },
+  "containerActionError": "Action failed: {details}",
+  "@containerActionError": {
+    "placeholders": {
+      "details": {}
+    }
+  },
+  "startAction": "Start",
+  "stopAction": "Stop",
+  "pauseAction": "Pause",
+  "resumeAction": "Resume",
+  "logPreferencesTitle": "Log preferences",
+  "linesRefreshTitle": "Lines & Refresh",
+  "linesFieldLabel": "Lines (default {count})",
+  "@linesFieldLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "applyLines": "Apply",
+  "manualRefresh": "Refresh",
+  "wrapLogLines": "Wrap log lines",
+  "displayTitle": "Display",
+  "lineNumberOption": "Line Number",
+  "timestampOption": "Timestamp",
+  "autoRefreshHint": "Automatically refresh logs",
+  "wrapHint": "Disable to scroll horizontally",
+  "containerLogsEmpty": "No logs available for this container.",
+  "logLoadError": "Unable to load logs: {details}",
+  "@logLoadError": {
+    "placeholders": {
+      "details": {}
+    }
+  },
+  "containerLogsTitle": "{name} - View Log",
+  "@containerLogsTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "linesApplyError": "Enter a valid number of lines",
+  "appLogsInfo": "Export the file and attach it when opening an issue on GitHub: https://github.com/MatteoR23/Flutainer/issues",
+  "credentialsLoadError": "Unable to load credentials: {details}",
+  "@credentialsLoadError": {
+    "placeholders": {
+      "details": {}
+    }
+  }
+}
