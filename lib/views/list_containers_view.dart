@@ -34,7 +34,7 @@ class _ListContainersScaffold extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Container'),
+        title: const Text('Flutainer - Containers'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
