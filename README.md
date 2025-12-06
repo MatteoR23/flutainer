@@ -2,6 +2,18 @@
 
 A new Flutter project.
 
+## Roadmap
+
+- Review app permissions
+- Implement view container logs
+- Implement container exec
+- Implement translations
+- Apply a gracefully theme (with dark and light mode)
+- Github autobuild apk
+- Apk signing
+- Publish to F-Droid
+- Publish to PlayStore
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
