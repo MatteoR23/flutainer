@@ -26,13 +26,13 @@ jobs:
 
       # Install Flutter differently depending on architecture
       - name: Install Flutter (x64)
-        if: matrix.use_snap == 'false'
+        if: ${{ !matrix.use_snap }}
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
       - name: Install Flutter via Snap (ARM64)
-        if: matrix.use_snap == 'true'
+        if: ${{ matrix.use_snap }}
         run: |
           sudo snap install flutter --classic
           flutter --version
