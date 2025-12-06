@@ -132,21 +132,22 @@ class _ListContainersScaffold extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
-            FilledButton.icon(
+            //const SizedBox(width: 12),
+            
+          ],
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FilledButton.icon(
               onPressed: viewModel.isLoadingContainers
                   ? null
                   : viewModel.refreshContainers,
               icon: const Icon(Icons.refresh),
               label: Text(context.l10n.refreshButton),
             ),
-          ],
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
               Switch.adaptive(
                 value: viewModel.autoRefreshEnabled,
                 onChanged: viewModel.setAutoRefresh,
