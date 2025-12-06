@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/endpoint_credential.dart';
 import '../viewmodels/app_view_model.dart';
+import 'list_containers_view.dart';
 
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});
@@ -280,10 +281,9 @@ void _connectToEndpoint(
   BuildContext context,
   EndpointCredential credential,
 ) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-          'Connessione a ${credential.name.isEmpty ? credential.url : credential.name}...'),
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => ListContainersView(credential: credential),
     ),
   );
 }
