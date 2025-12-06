@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/endpoint_credential.dart';
 import '../viewmodels/app_view_model.dart';
 import 'list_containers_view.dart';
+import 'widgets/app_navigation_drawer.dart';
 
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});
@@ -21,7 +22,18 @@ class HomePageView extends StatelessWidget {
             tooltip: 'Ricarica',
             onPressed: viewModel.isLoading ? null : () => viewModel.refresh(),
           ),
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu),
+              tooltip: 'Menu',
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+            ),
+          ),
         ],
+      ),
+      endDrawer: AppNavigationDrawer(
+        onEndpointSelected: (credential) =>
+            _connectToEndpoint(context, credential),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showCredentialDialog(context),
@@ -30,7 +42,13 @@ class HomePageView extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: _buildBody(viewModel, context),
+        child: Column(
+          children: [
+            const _FlutainerHero(),
+            const SizedBox(height: 20),
+            Expanded(child: _buildBody(viewModel, context)),
+          ],
+        ),
       ),
     );
   }
@@ -74,71 +92,12 @@ class HomePageView extends StatelessWidget {
       itemCount: viewModel.credentials.length,
       itemBuilder: (context, index) {
         final credential = viewModel.credentials[index];
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  credential.name.isEmpty ? credential.url : credential.name,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  credential.url,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'API key: ${_maskApiKey(credential.apiKey)}',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    FilledButton.tonalIcon(
-                      onPressed: () => _connectToEndpoint(context, credential),
-                      icon: const Icon(Icons.podcasts),
-                      label: const Text('Connetti'),
-                    ),
-                    OutlinedButton.icon(
-                      onPressed: () => _showCredentialDialog(
-                        context,
-                        credential: credential,
-                      ),
-                      icon: const Icon(Icons.edit),
-                      label: const Text('Modifica'),
-                    ),
-                    TextButton.icon(
-                      onPressed: () =>
-                          _confirmDeletion(context, credential.id),
-                      icon: const Icon(Icons.delete_outline),
-                      label: const Text('Elimina'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
+        return _EndpointCard(credential: credential);
       },
-      separatorBuilder: (_, _) => const SizedBox(height: 12),
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
     );
   }
 
-  static String _maskApiKey(String apiKey) {
-    if (apiKey.isEmpty) return '(vuota)';
-    const maskChar = '*';
-    if (apiKey.length <= 4) {
-      return ''.padLeft(apiKey.length, maskChar);
-    }
-    final visible = apiKey.substring(apiKey.length - 4);
-    final masked = ''.padLeft(apiKey.length - 4, maskChar);
-    return '$masked$visible';
-  }
 }
 
 Future<void> _showCredentialDialog(
@@ -286,4 +245,145 @@ void _connectToEndpoint(
       builder: (_) => ListContainersView(credential: credential),
     ),
   );
+}
+
+class _FlutainerHero extends StatelessWidget {
+  const _FlutainerHero();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            theme.colorScheme.primary,
+            theme.colorScheme.secondary,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.primary.withAlpha((0.3 * 255).round()),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(24),
+      child: Row(
+        children: [
+          Container(
+            width: 96,
+            height: 96,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.onPrimary
+                  .withAlpha((0.15 * 255).round()),
+              shape: BoxShape.circle,
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.directions_boat_filled,
+                size: 56,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Benvenuto su Flutainer',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Tieni sotto controllo i container Portainer ovunque tu sia.',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EndpointCard extends StatelessWidget {
+  const _EndpointCard({required this.credential});
+
+  final EndpointCredential credential;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              credential.name.isEmpty ? credential.url : credential.name,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              credential.url,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'API key: ${_maskApiKey(credential.apiKey)}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                FilledButton.tonalIcon(
+                  onPressed: () => _connectToEndpoint(context, credential),
+                  icon: const Icon(Icons.podcasts),
+                  label: const Text('Connetti'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () => _showCredentialDialog(
+                    context,
+                    credential: credential,
+                  ),
+                  icon: const Icon(Icons.edit),
+                  label: const Text('Modifica'),
+                ),
+                TextButton.icon(
+                  onPressed: () => _confirmDeletion(context, credential.id),
+                  icon: const Icon(Icons.delete_outline),
+                  label: const Text('Elimina'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String _maskApiKey(String apiKey) {
+  if (apiKey.isEmpty) return '(vuota)';
+  const maskChar = '*';
+  if (apiKey.length <= 4) {
+    return ''.padLeft(apiKey.length, maskChar);
+  }
+  final visible = apiKey.substring(apiKey.length - 4);
+  final masked = ''.padLeft(apiKey.length - 4, maskChar);
+  return '$masked$visible';
 }

@@ -5,6 +5,7 @@ import '../models/endpoint_credential.dart';
 import '../models/portainer_container.dart';
 import '../services/portainer_service.dart';
 import '../viewmodels/list_containers_view_model.dart';
+import 'widgets/app_navigation_drawer.dart';
 
 class ListContainersView extends StatelessWidget {
   const ListContainersView({
@@ -20,13 +21,15 @@ class ListContainersView extends StatelessWidget {
       create: (_) => ListContainersViewModel(
         service: PortainerService(credential: credential),
       )..initialize(),
-      child: const _ListContainersScaffold(),
+      child: _ListContainersScaffold(currentCredential: credential),
     );
   }
 }
 
 class _ListContainersScaffold extends StatelessWidget {
-  const _ListContainersScaffold();
+  const _ListContainersScaffold({required this.currentCredential});
+
+  final EndpointCredential currentCredential;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,25 @@ class _ListContainersScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutainer - Containers'),
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu),
+              tooltip: 'Menu',
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+            ),
+          ),
+        ],
+      ),
+      endDrawer: AppNavigationDrawer(
+        currentCredentialId: currentCredential.id,
+        onEndpointSelected: (credential) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<void>(
+              builder: (_) => ListContainersView(credential: credential),
+            ),
+          );
+        },
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
