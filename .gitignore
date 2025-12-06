@@ -33,6 +33,10 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Android signing artifacts
+android/key.properties
+android/app/*.jks
+
 # Generated localization sources
 lib/l10n/app_localizations*.dart
 
