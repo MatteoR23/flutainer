@@ -343,17 +343,21 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
                   ),
                 );
               }
+              final hasLabel = label.trim().isNotEmpty;
+              final labelWidth =
+                  viewModel.labelMode == LogLabelMode.lineNumber ? 56.0 : 160.0;
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: 90,
-                      child: Text(label, style: labelStyle),
-                    ),
-                    const SizedBox(width: 12),
+                    if (hasLabel)
+                      SizedBox(
+                        width: labelWidth,
+                        child: Text(label, style: labelStyle),
+                      ),
+                    if (hasLabel) const SizedBox(width: 12),
                     Expanded(child: messageDisplay),
                   ],
                 ),
