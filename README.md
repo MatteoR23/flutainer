@@ -28,11 +28,12 @@ your Docker containers from mobile or desktop devices. It currently supports:
 ## Roadmap
 
 - [x] Review app permissions
-- [ ] Implement view container logs
-- [ ] Implement container exec
+- [x] Implement view container logs
 - [ ] Implement translations
-- [ ] Apply a gracefully theme (with dark and light mode)
+- [x] Implement in-app logs (DEBUG only)
+- [x] Apply a gracefully theme (with dark and light mode)
 - [ ] Github autobuild apk
 - [ ] Apk signing
 - [ ] Publish to F-Droid
 - [ ] Publish to PlayStore
+- [ ] Implement container exec

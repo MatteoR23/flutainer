@@ -5,6 +5,7 @@ import '../models/endpoint_credential.dart';
 import '../models/portainer_container.dart';
 import '../services/portainer_service.dart';
 import '../viewmodels/list_containers_view_model.dart';
+import 'container_log_view.dart';
 import 'widgets/app_navigation_drawer.dart';
 
 class ListContainersView extends StatelessWidget {
@@ -196,11 +197,31 @@ class _ListContainersScaffold extends StatelessWidget {
       separatorBuilder: (context, _) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final container = containers[index];
+        final environment = viewModel.selectedEnvironment;
         return _ContainerCard(
           container: container,
           viewModel: viewModel,
+          onViewLogs: environment == null
+              ? null
+              : () => _openContainerLogs(context, container, environment.id),
         );
       },
+    );
+  }
+
+  void _openContainerLogs(
+    BuildContext context,
+    PortainerContainer container,
+    int environmentId,
+  ) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ContainerLogView(
+          credential: currentCredential,
+          environmentId: environmentId,
+          container: container,
+        ),
+      ),
     );
   }
 }
@@ -209,10 +230,12 @@ class _ContainerCard extends StatelessWidget {
   const _ContainerCard({
     required this.container,
     required this.viewModel,
+    required this.onViewLogs,
   });
 
   final PortainerContainer container;
   final ListContainersViewModel viewModel;
+  final VoidCallback? onViewLogs;
 
   Color _colorForState(ContainerVisualState state, ThemeData theme) {
     switch (state) {
@@ -304,6 +327,15 @@ class _ContainerCard extends StatelessWidget {
                   icon: const Icon(Icons.play_circle),
                 ),
             ],
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: OutlinedButton.icon(
+              onPressed: onViewLogs,
+              icon: const Icon(Icons.receipt_long),
+              label: const Text('View log'),
+            ),
           ),
         ],
       ),
