@@ -100,7 +100,7 @@ class _ListContainersScaffold extends StatelessWidget {
           initialValue: selectedEnv?.id,
           decoration: InputDecoration(
             labelText: context.l10n.environmentLabel,
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
           ),
           items: viewModel.environments
               .map(
@@ -128,7 +128,7 @@ class _ListContainersScaffold extends StatelessWidget {
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
                   hintText: context.l10n.searchHint,
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
