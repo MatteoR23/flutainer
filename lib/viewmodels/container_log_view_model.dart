@@ -22,6 +22,7 @@ class ContainerLogViewModel extends ChangeNotifier {
   final AppLogger _logger;
 
   static const String _linesKey = 'container_log_lines';
+  static const String _autoRefreshKey = 'container_log_auto_refresh';
 
   List<ContainerLogEntry> _entries = <ContainerLogEntry>[];
   bool _isLoading = false;
@@ -44,6 +45,11 @@ class ContainerLogViewModel extends ChangeNotifier {
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
     _lineCount = _prefs?.getInt(_linesKey) ?? 1000;
+    _autoRefresh = _prefs?.getBool(_autoRefreshKey) ?? false;
+    if (_autoRefresh) {
+      _startTimer();
+      _logger.log('Restored auto refresh preference for container logs');
+    }
     await loadLogs();
   }
 
@@ -87,6 +93,7 @@ class ContainerLogViewModel extends ChangeNotifier {
   void toggleAutoRefresh(bool value) {
     if (_autoRefresh == value) return;
     _autoRefresh = value;
+    unawaited(_prefs?.setBool(_autoRefreshKey, _autoRefresh));
     if (value) {
       _startTimer();
       _logger.log('Enabled auto refresh for container logs');
