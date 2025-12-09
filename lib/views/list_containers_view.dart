@@ -35,6 +35,28 @@ class _ListContainersScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _ListContainersScaffoldView(
+      currentCredential: currentCredential,
+    );
+  }
+}
+
+class _ListContainersScaffoldView extends StatefulWidget {
+  const _ListContainersScaffoldView({required this.currentCredential});
+
+  final EndpointCredential currentCredential;
+
+  @override
+  State<_ListContainersScaffoldView> createState() =>
+      _ListContainersScaffoldViewState();
+}
+
+class _ListContainersScaffoldViewState
+    extends State<_ListContainersScaffoldView> {
+  bool _controlsExpanded = true;
+
+  @override
+  Widget build(BuildContext context) {
     final viewModel = context.watch<ListContainersViewModel>();
 
     return Scaffold(
@@ -51,7 +73,7 @@ class _ListContainersScaffold extends StatelessWidget {
         ],
       ),
       endDrawer: AppNavigationDrawer(
-        currentCredentialId: currentCredential.id,
+        currentCredentialId: widget.currentCredential.id,
         onEndpointSelected: (credential) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute<void>(
@@ -96,67 +118,7 @@ class _ListContainersScaffold extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        DropdownButtonFormField<int>(
-          initialValue: selectedEnv?.id,
-          decoration: InputDecoration(
-            labelText: context.l10n.environmentLabel,
-            border: const OutlineInputBorder(),
-          ),
-          items: viewModel.environments
-              .map(
-                (env) => DropdownMenuItem<int>(
-                  value: env.id,
-                  child: Text(env.name),
-                ),
-              )
-              .toList(),
-          onChanged: viewModel.isLoadingContainers
-              ? null
-              : (value) {
-                  if (value != null) {
-                    viewModel.selectEnvironment(value);
-                  }
-                },
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                initialValue: viewModel.searchQuery,
-                onChanged: viewModel.setSearchQuery,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: context.l10n.searchHint,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-            ),
-            //const SizedBox(width: 12),
-            
-          ],
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FilledButton.icon(
-              onPressed: viewModel.isLoadingContainers
-                  ? null
-                  : viewModel.refreshContainers,
-              icon: const Icon(Icons.refresh),
-              label: Text(context.l10n.refreshButton),
-            ),
-              Switch.adaptive(
-                value: viewModel.autoRefreshEnabled,
-                onChanged: viewModel.setAutoRefresh,
-              ),
-              const SizedBox(width: 4),
-              Text(context.l10n.autoRefreshLabel),
-            ],
-          ),
-        ),
+        _buildControlsCard(context, viewModel, selectedEnv?.id),
         const SizedBox(height: 8),
         if (viewModel.containersError != null)
           Padding(
@@ -172,6 +134,83 @@ class _ListContainersScaffold extends StatelessWidget {
           child: _buildContainersSection(viewModel, theme, context),
         ),
       ],
+    );
+  }
+
+  Widget _buildControlsCard(
+    BuildContext context,
+    ListContainersViewModel viewModel,
+    int? selectedEnvironmentId,
+  ) {
+    return Card(
+      child: ExpansionTile(
+        key: const PageStorageKey('containers_controls_panel'),
+        initiallyExpanded: _controlsExpanded,
+        onExpansionChanged: (expanded) {
+          setState(() => _controlsExpanded = expanded);
+        },
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        title: Text(context.l10n.containersControlsTitle),
+        subtitle: Text(context.l10n.containersControlsSubtitle),
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: DropdownButtonFormField<int>(
+              initialValue: selectedEnvironmentId,
+              decoration: InputDecoration(
+                labelText: context.l10n.environmentLabel,
+                border: const OutlineInputBorder(),
+              ),
+              items: viewModel.environments
+                  .map(
+                    (env) => DropdownMenuItem<int>(
+                      value: env.id,
+                      child: Text(env.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: viewModel.isLoadingContainers
+                  ? null
+                  : (value) {
+                      if (value != null) {
+                        viewModel.selectEnvironment(value);
+                      }
+                    },
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            key: const PageStorageKey('containers_search_field'),
+            initialValue: viewModel.searchQuery,
+            onChanged: viewModel.setSearchQuery,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: context.l10n.searchHint,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              FilledButton.icon(
+                onPressed: viewModel.isLoadingContainers
+                    ? null
+                    : viewModel.refreshContainers,
+                icon: const Icon(Icons.refresh),
+                label: Text(context.l10n.refreshButton),
+              ),
+              const SizedBox(width: 12),
+              Switch.adaptive(
+                value: viewModel.autoRefreshEnabled,
+                onChanged: viewModel.setAutoRefresh,
+              ),
+              const SizedBox(width: 4),
+              Text(context.l10n.autoRefreshLabel),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -222,7 +261,7 @@ class _ListContainersScaffold extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => ContainerLogView(
-          credential: currentCredential,
+          credential: widget.currentCredential,
           environmentId: environmentId,
           container: container,
         ),

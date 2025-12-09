@@ -226,13 +226,6 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
               ),
           ],
         ),
-        const SizedBox(height: 8),
-        _preferenceSwitchTile(
-          title: context.l10n.wrapLogLines,
-          subtitle: context.l10n.wrapHint,
-          value: viewModel.wrapLines,
-          onChanged: viewModel.setWrapLines,
-        ),
       ],
     );
   }
@@ -283,7 +276,7 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
       ],
     );
   }
-
+  
   Widget _buildLogArea(
     BuildContext context,
     ContainerLogViewModel viewModel,
@@ -369,6 +362,7 @@ class _ContainerLogScaffoldState extends State<_ContainerLogScaffold> {
     );
   }
 }
+
 
 class _ErrorState extends StatelessWidget {
   const _ErrorState({required this.message, required this.onRetry});

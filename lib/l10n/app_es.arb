@@ -1,7 +1,7 @@
 {
   "@@locale": "es",
   "appTitle": "Flutainer",
-  "endpointsTitle": "Endpoints",
+  "endpointsTitle": "Flutainer - Endpoints",
   "refreshTooltip": "Actualizar",
   "menuTooltip": "Menú",
   "addEndpoint": "Añadir endpoint",
@@ -68,6 +68,8 @@
   "searchHint": "Buscar contenedores...",
   "refreshButton": "Actualizar",
   "autoRefreshLabel": "Auto actualización",
+  "containersControlsTitle": "Filtros y controles",
+  "containersControlsSubtitle": "Opciones de búsqueda y actualización de la lista",
   "noEnvironmentsMessage": "No hay entornos disponibles para este endpoint.",
   "noContainersMessage": "No se encontraron contenedores para el entorno seleccionado.",
   "noSearchResultsMessage": "Ningún contenedor coincide con la búsqueda.",

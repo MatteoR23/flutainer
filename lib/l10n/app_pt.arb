@@ -68,6 +68,8 @@
   "searchHint": "Buscar containers...",
   "refreshButton": "Atualizar",
   "autoRefreshLabel": "Atualização automática",
+  "containersControlsTitle": "Filtros e controles",
+  "containersControlsSubtitle": "Busca e opções de atualização da lista",
   "noEnvironmentsMessage": "Nenhum ambiente disponível para este endpoint.",
   "noContainersMessage": "Nenhum container encontrado para o ambiente selecionado.",
   "noSearchResultsMessage": "Nenhum container corresponde à pesquisa.",
