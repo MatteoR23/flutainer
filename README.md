@@ -37,7 +37,7 @@ TODO: the workflow does not exists yet!!
 - [x] Implement in-app logs (DEBUG only)
 - [x] Apply a gracefully theme (with dark and light mode)
 - [x] Apk signing
-- [x] Github autobuild apk
+- [ ] Github autobuild apk
 - [ ] Publish to F-Droid
 - [ ] Publish to PlayStore
 - [ ] First stable release
