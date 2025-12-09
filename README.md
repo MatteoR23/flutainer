@@ -36,7 +36,7 @@ TODO: the workflow does not exists yet!!
 - [x] Implement translations
 - [x] Implement in-app logs (DEBUG only)
 - [x] Apply a gracefully theme (with dark and light mode)
-- [x] Apk signing
+- [ ] Apk signing
 - [ ] Github autobuild apk
 - [ ] Publish to F-Droid
 - [ ] Publish to PlayStore
