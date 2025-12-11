@@ -25,6 +25,10 @@ your Docker containers from mobile or desktop devices. It currently supports:
    flutter build apk --release
    ```
 
+## Store Metadata (F-Droid)
+
+Fastlane-style metadata for F-Droid lives in `fastlane/metadata/android`. Update `title.txt`, `short_description.txt`, `full_description.txt`, and `privacy_policy.txt` for each locale, and add changelog files under `<locale>/changelogs/<versionCode>.txt` whenever you bump the Android version code. Default locales provided: `en-US` and `it-IT`.
+
 ## Continuous Integration & Releases
 
 TODO: the workflow does not exists yet!!

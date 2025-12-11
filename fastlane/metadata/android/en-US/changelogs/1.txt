@@ -1,0 +1,1 @@
+Initial release on F-Droid: register Portainer endpoints with API keys, manage containers (start/stop/pause), view logs with optional auto refresh, light and dark themes.

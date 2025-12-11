@@ -1,0 +1,10 @@
+Flutainer is an open source client for Portainer that lets you monitor and control Docker containers from mobile and desktop.
+
+Features:
+- register multiple Portainer endpoints via API keys stored with secure storage when available
+- browse environments and filter containers by name
+- start, stop, pause, and unpause containers with busy state feedback and optional auto refresh
+- view container logs with streaming updates plus sharing/export
+- light and dark themes, localized UI (EN, IT, ES, DE, PT)
+
+Data stays between you and the Portainer endpoints you configure. Flutainer does not include analytics or third party trackers.

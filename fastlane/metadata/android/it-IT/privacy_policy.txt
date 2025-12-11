@@ -1,0 +1,1 @@
+Flutainer si collega solo agli endpoint Portainer che aggiungi. Le API key restano sul dispositivo usando storage sicuro quando disponibile. Nessuna analitica o servizi di terze parti.

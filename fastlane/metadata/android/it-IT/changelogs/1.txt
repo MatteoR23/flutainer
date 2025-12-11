@@ -1,0 +1,1 @@
+Prima release su F-Droid: registra endpoint Portainer con API key, gestisci i container (start/stop/pause), visualizza log con auto refresh, tema chiaro/scuro.

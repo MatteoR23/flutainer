@@ -1,0 +1,1 @@
+Flutainer connects only to the Portainer endpoints you add. API keys stay on device using secure storage when available. No analytics or third party services.
