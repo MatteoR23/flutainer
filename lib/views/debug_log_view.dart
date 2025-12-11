@@ -84,9 +84,11 @@ class DebugLogView extends StatelessWidget {
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
       final file = File('${dir.path}/flutainer-log-$timestamp.txt');
       await file.writeAsString(logs.reversed.join('\n'));
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        text: l10n.logExportInstructions,
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          text: l10n.logExportInstructions,
+        ),
       );
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
