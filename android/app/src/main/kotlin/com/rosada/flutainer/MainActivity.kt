@@ -1,4 +1,4 @@
-package com.example.flutainer
+package com.rosada.flutainer
 
 import io.flutter.embedding.android.FlutterActivity
 
